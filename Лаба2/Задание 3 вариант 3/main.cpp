@@ -5,12 +5,29 @@ using namespace std;
 
 int main() {
 	int n;
-	cin >> n;
+	cin.exceptions(istream::failbit | istream::badbit);
+	try
+	{
+		cin >> n;
+	}
+	catch (istream::failure e)
+	{
+		cerr << "Error" << endl;
+		return 1;
+	}
 	int g;
 	int count = 0;
 	int h;
 	for (int i = 0; i < n; i++) {
-		cin >> g;
+		try
+		{
+			cin >> g;
+		}
+		catch (istream::failure e)
+		{
+			cerr << "Error" << endl;
+			return 1;
+		}
 		while (g > 0) {
 			h = g % 10;
 			g /= 10;
