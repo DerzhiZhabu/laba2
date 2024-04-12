@@ -15,6 +15,18 @@ int main() {
 	map<char, int> col = { {'R', 0}, {'W', 1}, {'B', 2} };
 	cin >> a;
 	for (int i = 0; i < a.size() / 2; i++) {
+		if (!isalpha(a[i * 2])) {
+			cout << "Error";
+			return 1;
+		}
+		if (!isdigit(a[i * 2 + 1])) {
+			cout << "Error";
+			return 1;
+		}
+		if (a[i * 2] != 'R' && a[i * 2] != 'W' && a[i * 2] != 'B') {
+			cout << "Error";
+			return 1;
+		}
 		colc = a[i * 2 + 1] - '0';
 		if (wh.find(colc) != wh.end()) {
 			wh[colc][col[a[i * 2]]] = 1;
