@@ -3,7 +3,6 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the number of inputs followed by the values: ");
         String[] inputs = scanner.nextLine().split(" ");
         int n = Integer.parseInt(inputs[0]);
         
