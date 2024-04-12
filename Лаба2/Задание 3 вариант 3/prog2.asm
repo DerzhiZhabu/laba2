@@ -5,7 +5,7 @@ entry start ; говорим windows-у где из этой каши старт
 include 'includes\win32a.inc' ; подключаем библиотеку FASM-а
 ;можно и без нее но будет очень сложно.
 
-section '.data' data readable writeable ; секция данных
+section '.data' data readable writeable ; секция данных 
 
 	print_temp db 'Result %d',0
 	hello db '%d',0
@@ -19,60 +19,60 @@ section '.data' data readable writeable ; секция данных
 section '.code' code readable writeable executable
 
 start:
-	push number
+	push number 
 	push hello
-	call [scanf]
-	mov eax, [number]
+	call [scanf] ;потоковый ввод количества цифр
+	mov eax, [number] ; помещаем врегистр eax значение из number
 	jnz take_new_number
 	
 	take_new_number:
 		push new_number
 		push new_take
-		call [scanf]
+		call [scanf] ;потоковый ввод числа
 		geting_number:
-			mov eax, [new_number]
+			mov eax, [new_number] ; помещаем в eax разбираемое число
 			xor edx, edx
 			mov ecx, 10
-			div ecx
-			push eax
+			div ecx ; делим eax на 10 остаток лежит в edx - это последняя цифра числа, в eax - частное(остальные цифры)
+			push eax; засовываем в стек значение eax, потому что оно нам сейчас не нужно
 			mov eax, edx
 			mov [additional], eax
-			mov ebx, eax
+			mov ebx, eax ; резервируем цифру в ebx
 			mov ecx, 3
-			xor edx, edx
-			div ecx
+			xor edx, edx ; очищаем регистр edx
+			div ecx ; нажодим остаток от деления на 3
 			mov ecx, eax
 			mov eax, edx
 			mov [additional], eax
-			cmp eax, 0
-			jnz more
-				add ebx, [counter]
+			cmp eax, 0; проверяем есть ли остаток от деления на 3
+			jnz more ; если остаток не ноль переходим к метке more
+				add ebx, [counter]; если остаток ноль добавляем цифру из ebx в переменную-счётчик
 				mov [counter], ebx
 			more:
-				pop eax
+				pop eax ; вытаскиваем из стека цифры, которые мы еще не обработали
 				mov [new_number], eax
 				mov eax, [new_number]
-				cmp eax, 0
-				jnz geting_number
+				cmp eax, 0; если цифр не осталось идем дальше
+				jnz geting_number; если цифры еще есть возвращаемся к метке geting_number и повторяем процесс с начала
 			
-		mov ecx, [number]
-		sub ecx, 1
-		mov [number], ecx
+		mov ecx, [number] 
+		sub ecx, 1 ; меняем число цифр, которые будут введены
+		mov [number], ecx 
 		mov [additional], ecx
 		mov eax, [additional]
-		cmp eax, 0
-		jnz take_new_number
+		cmp eax, 0 ; если больше цифр вводится не будет, то переходим к завершению
+		jnz take_new_number; если цифры еще будут вводиться, то возвращаемся к метке take_new_number и повторяем все с начала
 		
 
 listening:
 	mov eax, [counter]
 	push eax
 	push print_temp
-	call [printf]
+	call [printf]; выводим в потоковый вывод счётчик
 	
 	call [getch]
 	
-	invoke ExitProcess, 0 
+	invoke ExitProcess, 0  ;завершаем программу
 
 checked_div3:
 	add ecx, [counter]
@@ -80,7 +80,7 @@ checked_div3:
 	jp more
 	
 
-section '.idata' data import readable ; секция импорта
+section '.idata' data import readable ; секция импорта библиотек и функций
         library kernel, 'kernel32.dll',\
                 msvcrt, 'msvcrt.dll'
   
